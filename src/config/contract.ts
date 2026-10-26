@@ -6,6 +6,9 @@ import { defineChain } from "viem";
  * Explorer: https://scan.botchain.ai
  * Native Token: BOT (150M Total Supply)
  */
+export const BOTCHAIN_RPC_URL = "https://rpc.botchain.ai";
+export const BOTCHAIN_EXPLORER_URL = "https://scan.botchain.ai";
+
 export const botchainMainnet = defineChain({
   id: 677,
   name: "Botchain Mainnet",
@@ -16,16 +19,16 @@ export const botchainMainnet = defineChain({
   },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.botchain.ai"],
+      http: [BOTCHAIN_RPC_URL],
     },
     public: {
-      http: [process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.botchain.ai"],
+      http: [BOTCHAIN_RPC_URL],
     },
   },
   blockExplorers: {
     default: {
       name: "BotchainScan",
-      url: process.env.NEXT_PUBLIC_EXPLORER_URL || "https://scan.botchain.ai",
+      url: BOTCHAIN_EXPLORER_URL,
     },
   },
 });
@@ -33,12 +36,11 @@ export const botchainMainnet = defineChain({
 export const activeChain = botchainMainnet;
 
 /**
- * Deployed Stamply contract address.
- * Configured via NEXT_PUBLIC_CONTRACT_ADDRESS.
+ * Deployed Stamply contract address on Botchain Mainnet.
+ * Hardcoded directly to avoid any stale testnet environment variables from Vercel dashboard.
  */
-export const STAMPLY_CONTRACT_ADDRESS = (process.env
-  .NEXT_PUBLIC_CONTRACT_ADDRESS ||
-  "0x15E4F4cC5094797fdc9a0857f30763edE70dD786") as `0x${string}`;
+export const STAMPLY_CONTRACT_ADDRESS: `0x${string}` =
+  "0x15E4F4cC5094797fdc9a0857f30763edE70dD786";
 
 /**
  * Stamply Smart Contract ABI

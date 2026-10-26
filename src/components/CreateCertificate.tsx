@@ -396,7 +396,7 @@ export function CreateCertificate({ onCertificateStamped }: CreateCertificatePro
               <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5 text-xs text-amber-300">
                 <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  Contract address not configured yet. Deploy the contract using the provided script and set <code className="font-mono text-white">NEXT_PUBLIC_CONTRACT_ADDRESS</code> in your environment file.
+                  Contract address is not configured. Please verify that the contract is deployed on Botchain Mainnet.
                 </div>
               </div>
             )}

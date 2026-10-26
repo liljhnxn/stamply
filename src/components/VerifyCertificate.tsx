@@ -6,6 +6,7 @@ import {
   STAMPLY_ABI,
   STAMPLY_CONTRACT_ADDRESS,
   activeChain,
+  BOTCHAIN_RPC_URL,
 } from "@/config/contract";
 import {
   Search,
@@ -64,7 +65,7 @@ export function VerifyCertificate() {
     try {
       const publicClient = createPublicClient({
         chain: activeChain,
-        transport: http(process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.botchain.ai"),
+        transport: http(BOTCHAIN_RPC_URL),
       });
 
       // First check if certificate exists
