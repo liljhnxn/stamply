@@ -24,23 +24,23 @@ const config: HardhatUserConfig = {
     localhost: {
       url: "http://127.0.0.1:8545",
     },
-    botchainTestnet: {
-      url: "https://rpc.bohr.life",
-      chainId: 968,
+    botchainMainnet: {
+      url: "https://rpc.botchain.ai",
+      chainId: 677,
       accounts: accounts.length > 0 ? accounts : undefined,
     },
   },
   etherscan: {
     apiKey: {
-      botchainTestnet: "empty",
+      botchainMainnet: "empty",
     },
     customChains: [
       {
-        network: "botchainTestnet",
-        chainId: 968,
+        network: "botchainMainnet",
+        chainId: 677,
         urls: {
-          apiURL: "https://scan.bohr.life/api",
-          browserURL: "https://scan.bohr.life",
+          apiURL: "https://scan.botchain.ai/api",
+          browserURL: "https://scan.botchain.ai",
         },
       },
     ],

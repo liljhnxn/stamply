@@ -11,7 +11,7 @@ import { parseEventLogs } from "viem";
 import {
   STAMPLY_ABI,
   STAMPLY_CONTRACT_ADDRESS,
-  botchainTestnet,
+  activeChain,
 } from "@/config/contract";
 import {
   Award,
@@ -57,7 +57,7 @@ export function CreateCertificate({ onCertificateStamped }: CreateCertificatePro
     STAMPLY_CONTRACT_ADDRESS &&
     STAMPLY_CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000";
 
-  const isWrongNetwork = isConnected && chain?.id !== botchainTestnet.id;
+  const isWrongNetwork = isConnected && chain?.id !== activeChain.id;
 
   const {
     writeContract,
@@ -186,7 +186,7 @@ export function CreateCertificate({ onCertificateStamped }: CreateCertificatePro
                   Certificate Stamped On-Chain!
                   <Sparkles className="w-4 h-4 text-emerald-400" />
                 </h3>
-                <p className="text-xs text-slate-400">Permanently recorded on Botchain Testnet</p>
+                <p className="text-xs text-slate-400">Permanently recorded on {activeChain.name}</p>
               </div>
             </div>
             <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -269,12 +269,17 @@ export function CreateCertificate({ onCertificateStamped }: CreateCertificatePro
                     )}
                   </button>
                   <a
-                    href={`${botchainTestnet.blockExplorers.default.url}/tx/${stampedRecord.txHash}`}
+                    href={`${activeChain.blockExplorers.default.url}/tx/${stampedRecord.txHash}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
                   >
-                    <span>View on BohrScan</span>
+                    <img
+                      src="/botchain-logo.png"
+                      alt="BOT Chain"
+                      className="w-3.5 h-3.5 rounded-sm object-contain"
+                    />
+                    <span>View on BotchainScan</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -399,7 +404,7 @@ export function CreateCertificate({ onCertificateStamped }: CreateCertificatePro
             {isWrongNetwork && (
               <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2.5 text-xs text-amber-300">
                 <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Your wallet is connected to the wrong network. Please switch to Botchain Testnet (Chain ID: 968).</span>
+                <span>Your wallet is connected to the wrong network. Please switch to {activeChain.name} (Chain ID: {activeChain.id}).</span>
               </div>
             )}
 
@@ -420,7 +425,7 @@ export function CreateCertificate({ onCertificateStamped }: CreateCertificatePro
               <div className="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center gap-2.5 text-xs text-indigo-300 animate-pulse">
                 <Loader2 className="w-4 h-4 text-indigo-400 animate-spin shrink-0" />
                 <span>
-                  Confirming transaction on Botchain Testnet block explorer... Hash:{" "}
+                  Confirming transaction on {activeChain.name} block explorer... Hash:{" "}
                   <code className="font-mono text-white">{txHash?.slice(0, 10)}...</code>
                 </span>
               </div>

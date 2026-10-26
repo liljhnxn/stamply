@@ -19,7 +19,7 @@ Each certificate receives a unique, auto-incrementing ID that is stored permanen
 
 - **Decentralized Stamping:** Permanently write certificate metadata (ID, title, description, creator address, and block timestamp) to the Botchain blockchain.
 - **Public Verification:** Anyone can query and verify any Certificate ID directly on-chain without needing a wallet connected.
-- **Botchain Testnet Native:** Fully configured for the Botchain Testnet (Chain ID `968`).
+- **Botchain Mainnet Native:** Fully configured for Botchain Mainnet (Chain ID `677`).
 - **Interactive Web3 Interface:** Built with Next.js, Tailwind CSS, Wagmi, and Viem, featuring a modern dark navy aesthetic, real-time transaction tracking, and direct block explorer links.
 - **Smart Contract Security:** Strict validation enforcing non-empty titles, maximum character limits (100 for title, 1000 for description), and safe ID management.
 - **100% On-Chain Truth:** No mock data, no fake receipts, and no centralized databases.
@@ -37,16 +37,16 @@ Each certificate receives a unique, auto-incrementing ID that is stored permanen
 
 ---
 
-## 4. Blockchain Network Details (Botchain Testnet)
+## 4. Blockchain Network Details (Botchain Mainnet)
 
 | Parameter | Value |
 |---|---|
-| **Network Name** | Botchain Testnet |
-| **Chain ID** | `968` |
-| **RPC URL** | `https://rpc.bohr.life` |
-| **Block Explorer** | `https://scan.bohr.life` |
-| **Currency Symbol** | `BOT` |
-| **Deployed Contract** | [`0xEF2E6b3Da075ab4648f190A6CdBd58893DF1E688`](https://scan.bohr.life/address/0xEF2E6b3Da075ab4648f190A6CdBd58893DF1E688) |
+| **Network Name** | Botchain Mainnet |
+| **Chain ID** | `677` |
+| **RPC URL** | `https://rpc.botchain.ai` |
+| **Block Explorer** | `https://scan.botchain.ai` |
+| **Native Token** | `BOT` (150 Million Total Supply) |
+| **Deployed Contract** | [`0x15E4F4cC5094797fdc9a0857f30763edE70dD786`](https://scan.botchain.ai/address/0x15E4F4cC5094797fdc9a0857f30763edE70dD786) |
 
 ---
 
@@ -74,12 +74,12 @@ Fill in the values:
 # Your private key (only required if deploying the contract)
 PRIVATE_KEY=your_private_key_here
 
-# Deployed contract address (Chain ID: 968)
-NEXT_PUBLIC_CONTRACT_ADDRESS=0xYourDeployedContractAddressHere
+# Deployed contract address (Chain ID: 677)
+NEXT_PUBLIC_CONTRACT_ADDRESS=0x15E4F4cC5094797fdc9a0857f30763edE70dD786
 
-# Botchain Testnet RPC and Explorer
-NEXT_PUBLIC_RPC_URL=https://rpc.bohr.life
-NEXT_PUBLIC_EXPLORER_URL=https://scan.bohr.life
+# Botchain Mainnet RPC and Explorer
+NEXT_PUBLIC_RPC_URL=https://rpc.botchain.ai
+NEXT_PUBLIC_EXPLORER_URL=https://scan.botchain.ai
 ```
 
 ---
@@ -108,20 +108,19 @@ npx hardhat test
 
 ---
 
-## 7. Deploying the Smart Contract to Botchain Testnet
+## 7. Deploying the Smart Contract to Botchain Mainnet
 
 ### Step 1: Fund your deployer wallet
-Ensure the wallet corresponding to `PRIVATE_KEY` has native `BOT` testnet tokens from the Botchain faucet or testnet bridge.
+Ensure the wallet corresponding to `PRIVATE_KEY` has at least `~0.015 BOT` to cover the optimized deployment gas fee.
 
-### Step 2: Run the deployment script
+### Step 2: Run the Mainnet deployment script
 ```bash
-npm run deploy:testnet
+npm run deploy:mainnet
 ```
 Or:
 ```bash
-npx hardhat run scripts/deploy.ts --network botchainTestnet
+npx hardhat run scripts/deploy.ts --network botchainMainnet
 ```
-
 ### Step 3: Configure Contract Address
 The deployment output will display your new contract address:
 ```
@@ -143,10 +142,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-1. Connect your wallet (make sure your network is set to **Botchain Testnet - Chain ID 968**).
+1. Connect your wallet (make sure your network is set to **Botchain Mainnet - Chain ID 677**).
 2. Fill in the **Certificate Title** and **Description**.
 3. Click **Stamp Certificate** and confirm the transaction in your wallet.
-4. Once confirmed, you will see your **Certificate ID**, creator address, timestamp, and a direct link to the transaction on BohrScan!
+4. Once confirmed, you will see your **Certificate ID**, creator address, timestamp, and a direct link to the transaction on BotchainScan!
 5. Test the **Public Verification** section by searching for the Certificate ID to see live on-chain data.
 
 ---
@@ -166,9 +165,9 @@ npm run build
 2. Go to [Vercel Dashboard](https://vercel.com/) and click **Add New Project**.
 3. Import your Stamply repository.
 4. Under **Environment Variables**, add:
-   - `NEXT_PUBLIC_CONTRACT_ADDRESS` = `0x...` (your deployed contract address)
-   - `NEXT_PUBLIC_RPC_URL` = `https://rpc.bohr.life`
-   - `NEXT_PUBLIC_EXPLORER_URL` = `https://scan.bohr.life`
+   - `NEXT_PUBLIC_CONTRACT_ADDRESS` = `0x15E4F4cC5094797fdc9a0857f30763edE70dD786`
+   - `NEXT_PUBLIC_RPC_URL` = `https://rpc.botchain.ai`
+   - `NEXT_PUBLIC_EXPLORER_URL` = `https://scan.botchain.ai`
 5. Click **Deploy**. Vercel will build and host your dApp with global CDN edge routing.
 
 ---

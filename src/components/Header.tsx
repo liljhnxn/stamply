@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useAccount, useConnect, useDisconnect, useSwitchChain, useBalance } from "wagmi";
-import { botchainTestnet } from "@/config/contract";
-import { Wallet, LogOut, AlertTriangle, CheckCircle2, ChevronDown, Copy, Check } from "lucide-react";
+import { activeChain, botchainMainnet } from "@/config/contract";
+import { Wallet, LogOut, AlertTriangle, CheckCircle2, ChevronDown, Copy, Check, ExternalLink } from "lucide-react";
 
 export function Header() {
   const [mounted, setMounted] = useState(false);
@@ -16,14 +16,14 @@ export function Header() {
   const { switchChain, isPending: isSwitching } = useSwitchChain();
   const { data: balance } = useBalance({
     address,
-    chainId: botchainTestnet.id,
+    chainId: activeChain.id,
   });
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const isWrongNetwork = isConnected && chain?.id !== botchainTestnet.id;
+  const isWrongNetwork = isConnected && chain?.id !== activeChain.id;
 
   const copyAddress = () => {
     if (address) {
@@ -75,18 +75,31 @@ export function Header() {
         <div className="flex items-center gap-3">
           {/* Network Indicator */}
           <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-xs">
-            <span
-              className={`w-2 h-2 rounded-full ${
-                isConnected && !isWrongNetwork
-                  ? "bg-emerald-400 shadow-sm shadow-emerald-400/50 animate-pulse"
-                  : isWrongNetwork
-                  ? "bg-amber-400"
-                  : "bg-slate-500"
-              }`}
+            <img
+              src="/botchain-logo.png"
+              alt="BOT Chain"
+              className="w-3.5 h-3.5 rounded-sm object-contain"
             />
-            <span className="text-slate-300 font-medium">Botchain Testnet</span>
-            <span className="text-slate-500 font-mono text-[11px]">(968)</span>
+            <span className="text-slate-300 font-medium">{activeChain.name}</span>
+            <span className="text-slate-500 font-mono text-[11px]">({activeChain.id})</span>
           </div>
+
+          {/* Direct Mainnet Explorer Link */}
+          <a
+            href="https://scan.botchain.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-xs text-slate-300 hover:text-cyan-400 transition-colors"
+            title="Open BOT Chain Explorer"
+          >
+            <img
+              src="/botchain-logo.png"
+              alt="BOT Chain"
+              className="w-3.5 h-3.5 rounded-sm object-contain"
+            />
+            <span>Explorer</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+          </a>
 
           {!mounted ? (
             <div className="h-10 w-36 bg-slate-800/50 rounded-xl animate-pulse" />
@@ -104,12 +117,12 @@ export function Header() {
             </button>
           ) : isWrongNetwork ? (
             <button
-              onClick={() => switchChain({ chainId: botchainTestnet.id })}
+              onClick={() => switchChain({ chainId: activeChain.id })}
               disabled={isSwitching}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-all duration-200"
             >
               <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <span>{isSwitching ? "Switching..." : "Switch to Botchain"}</span>
+              <span>{isSwitching ? "Switching..." : "Switch to Botchain Mainnet"}</span>
             </button>
           ) : (
             <div className="relative">
@@ -152,6 +165,22 @@ export function Header() {
                         {copied ? "Copied!" : "Copy Address"}
                       </span>
                     </button>
+                    <a
+                      href={`${activeChain.blockExplorers.default.url}/address/${address}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between w-full px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-lg transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <img
+                          src="/botchain-logo.png"
+                          alt="BOT Chain"
+                          className="w-3.5 h-3.5 rounded-sm object-contain"
+                        />
+                        <span>View on BotchainScan</span>
+                      </span>
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                    </a>
                     <button
                       onClick={() => {
                         disconnect();

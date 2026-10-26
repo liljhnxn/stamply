@@ -17,30 +17,60 @@ async function main() {
 
   const balance = await ethers.provider.getBalance(deployer.address);
   console.log(`Deployer Address: ${deployer.address}`);
-  console.log(`Deployer Balance: ${ethers.formatEther(balance)} native tokens\n`);
+  console.log(`Deployer Balance: ${ethers.formatEther(balance)} BOT\n`);
 
-  if (balance === BigInt(0) && network.name !== "hardhat" && network.name !== "localhost") {
-    console.warn(
-      "WARNING: Deployer balance is 0. Deployment may fail due to insufficient funds."
-    );
+  console.log("Preparing Stamply contract factory...");
+  const StamplyFactory = await ethers.getContractFactory("Stamply");
+
+  // Query network fee data to use minimum gas without overpaying
+  const feeData = await ethers.provider.getFeeData();
+  const gasPrice = feeData.gasPrice || 20000000000n;
+  console.log(`Current Gas Price: ${ethers.formatUnits(gasPrice, "gwei")} Gwei`);
+
+  // Estimate exact deployment gas
+  const deployTxReq = await StamplyFactory.getDeployTransaction();
+  const estimatedGas = await ethers.provider.estimateGas(deployTxReq);
+  const estimatedCost = estimatedGas * gasPrice;
+
+  console.log(`Estimated Deployment Gas: ${estimatedGas.toString()} units`);
+  console.log(`Estimated Deployment Cost: ${ethers.formatEther(estimatedCost)} BOT\n`);
+
+  if (balance < estimatedCost && network.name !== "hardhat" && network.name !== "localhost") {
+    console.error(`================================================================`);
+    console.error(`ERROR: Insufficient funds in deployer wallet to cover gas!`);
+    console.error(`Required: ~${ethers.formatEther(estimatedCost)} BOT`);
+    console.error(`Available: ${ethers.formatEther(balance)} BOT`);
+    console.error(`Please send at least 0.02 BOT to deployer address:`);
+    console.error(`${deployer.address}`);
+    console.error(`================================================================\n`);
+    throw new Error("Insufficient deployer balance for gas fee.");
   }
 
-  console.log("Deploying Stamply...");
-  const StamplyFactory = await ethers.getContractFactory("Stamply");
-  const stamply = await StamplyFactory.deploy();
+  console.log("Deploying Stamply (optimized for lowest gas fee)...");
+  // Pass exact gasPrice to ensure no excessive fee is used
+  const stamply = await StamplyFactory.deploy({
+    gasPrice: gasPrice,
+  });
+  console.log(`Transaction broadcast! Hash: ${stamply.deploymentTransaction()?.hash}`);
+  console.log("Waiting for block confirmation...");
   await stamply.waitForDeployment();
 
   const contractAddress = await stamply.getAddress();
   const deploymentTx = stamply.deploymentTransaction();
+  const receipt = await deploymentTx?.wait();
+
+  const gasUsed = receipt?.gasUsed || 0n;
+  const actualCost = gasUsed * (receipt?.gasPrice || gasPrice);
 
   console.log(`\n========================================`);
   console.log(`SUCCESS! Stamply contract deployed to:`);
   console.log(`Address: ${contractAddress}`);
   if (deploymentTx) {
     console.log(`Tx Hash: ${deploymentTx.hash}`);
-    if (network.config.chainId === 968) {
-      console.log(`Explorer: https://scan.bohr.life/tx/${deploymentTx.hash}`);
-    }
+    console.log(`Gas Used: ${gasUsed.toString()}`);
+    console.log(`Actual Cost: ${ethers.formatEther(actualCost)} BOT`);
+
+    console.log(`Explorer: https://scan.botchain.ai/tx/${deploymentTx.hash}`);
   }
   console.log(`========================================\n`);
   console.log(`Next step: Update NEXT_PUBLIC_CONTRACT_ADDRESS in your frontend .env file:`);

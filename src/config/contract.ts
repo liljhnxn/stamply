@@ -1,13 +1,14 @@
 import { defineChain } from "viem";
 
 /**
- * Official Botchain Testnet definition (Chain ID: 968)
- * RPC: https://rpc.bohr.life
- * Explorer: https://scan.bohr.life
+ * Official Botchain Mainnet definition (Chain ID: 677)
+ * RPC: https://rpc.botchain.ai
+ * Explorer: https://scan.botchain.ai
+ * Native Token: BOT (150M Total Supply)
  */
-export const botchainTestnet = defineChain({
-  id: 968,
-  name: "Botchain Testnet",
+export const botchainMainnet = defineChain({
+  id: 677,
+  name: "Botchain Mainnet",
   nativeCurrency: {
     decimals: 18,
     name: "BOT",
@@ -15,20 +16,21 @@ export const botchainTestnet = defineChain({
   },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.bohr.life"],
+      http: [process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.botchain.ai"],
     },
     public: {
-      http: [process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.bohr.life"],
+      http: [process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.botchain.ai"],
     },
   },
   blockExplorers: {
     default: {
-      name: "BohrScan",
-      url: process.env.NEXT_PUBLIC_EXPLORER_URL || "https://scan.bohr.life",
+      name: "BotchainScan",
+      url: process.env.NEXT_PUBLIC_EXPLORER_URL || "https://scan.botchain.ai",
     },
   },
-  testnet: true,
 });
+
+export const activeChain = botchainMainnet;
 
 /**
  * Deployed Stamply contract address.
@@ -36,7 +38,7 @@ export const botchainTestnet = defineChain({
  */
 export const STAMPLY_CONTRACT_ADDRESS = (process.env
   .NEXT_PUBLIC_CONTRACT_ADDRESS ||
-  "0xEF2E6b3Da075ab4648f190A6CdBd58893DF1E688") as `0x${string}`;
+  "0x15E4F4cC5094797fdc9a0857f30763edE70dD786") as `0x${string}`;
 
 /**
  * Stamply Smart Contract ABI

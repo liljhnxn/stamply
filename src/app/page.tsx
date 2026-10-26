@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { CreateCertificate, StampedCertificateRecord } from "@/components/CreateCertificate";
 import { VerifyCertificate } from "@/components/VerifyCertificate";
+import { EcosystemSection } from "@/components/EcosystemSection";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -27,6 +28,9 @@ export default function Home() {
 
           {/* Public Verification Section */}
           <VerifyCertificate />
+
+          {/* BOT Chain Ecosystem Section */}
+          <EcosystemSection />
         </div>
       </main>
 

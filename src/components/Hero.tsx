@@ -1,7 +1,7 @@
 "use client";
 
 import { useReadContract } from "wagmi";
-import { STAMPLY_ABI, STAMPLY_CONTRACT_ADDRESS, botchainTestnet } from "@/config/contract";
+import { STAMPLY_ABI, STAMPLY_CONTRACT_ADDRESS, activeChain } from "@/config/contract";
 import { ShieldCheck, Info, FileText, CheckCircle, ExternalLink } from "lucide-react";
 
 export function Hero() {
@@ -26,11 +26,15 @@ export function Hero() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Network & Protocol Pills */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/60 shadow-inner mb-6 text-xs text-slate-300">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-          <span className="font-medium">Botchain Testnet Network</span>
+        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/60 shadow-inner mb-6 text-xs text-slate-300">
+          <img
+            src="/botchain-logo.png"
+            alt="BOT Chain"
+            className="w-4 h-4 rounded-sm object-contain"
+          />
+          <span className="font-medium">{activeChain.name}</span>
           <span className="text-slate-500">•</span>
-          <span className="text-cyan-400 font-mono">Chain ID 968</span>
+          <span className="text-emerald-400 font-mono">Chain ID {activeChain.id}</span>
         </div>
 
         {/* Hero Title */}
@@ -64,14 +68,34 @@ export function Hero() {
             <span className="font-semibold text-emerald-400">Decentralized</span>
           </div>
 
+          <a
+            href="https://scan.botchain.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-950/40 border border-cyan-800/60 hover:border-cyan-400 text-sm text-cyan-300 hover:text-cyan-200 shadow-sm transition-all"
+          >
+            <img
+              src="/botchain-logo.png"
+              alt="BOT Chain Explorer"
+              className="w-4 h-4 rounded-sm object-contain"
+            />
+            <span>BotchainScan Explorer</span>
+            <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+          </a>
+
           {isAddressConfigured && (
             <a
-              href={`${botchainTestnet.blockExplorers.default.url}/address/${STAMPLY_CONTRACT_ADDRESS}`}
+              href={`${activeChain.blockExplorers.default.url}/address/${STAMPLY_CONTRACT_ADDRESS}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 text-sm text-slate-400 hover:text-cyan-400 transition-colors"
             >
-              <span>Contract: {STAMPLY_CONTRACT_ADDRESS.slice(0, 6)}...{STAMPLY_CONTRACT_ADDRESS.slice(-4)}</span>
+              <img
+                src="/botchain-logo.png"
+                alt="BOT Chain"
+                className="w-3.5 h-3.5 rounded-sm object-contain"
+              />
+              <span>Mainnet Contract: {STAMPLY_CONTRACT_ADDRESS.slice(0, 6)}...{STAMPLY_CONTRACT_ADDRESS.slice(-4)}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           )}

@@ -5,7 +5,7 @@ import { createPublicClient, http } from "viem";
 import {
   STAMPLY_ABI,
   STAMPLY_CONTRACT_ADDRESS,
-  botchainTestnet,
+  activeChain,
 } from "@/config/contract";
 import {
   Search,
@@ -63,8 +63,8 @@ export function VerifyCertificate() {
 
     try {
       const publicClient = createPublicClient({
-        chain: botchainTestnet,
-        transport: http(process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.bohr.life"),
+        chain: activeChain,
+        transport: http(process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.botchain.ai"),
       });
 
       // First check if certificate exists
@@ -102,7 +102,7 @@ export function VerifyCertificate() {
       if (err?.message?.includes("Certificate does not exist") || err?.shortMessage?.includes("Certificate does not exist")) {
         setNotFound(true);
       } else {
-        setErrorMessage("Failed to query Botchain Testnet RPC. Please verify your connection.");
+        setErrorMessage("Failed to query Botchain Mainnet RPC. Please verify your connection.");
       }
     } finally {
       setIsLoading(false);
@@ -184,7 +184,7 @@ export function VerifyCertificate() {
             <div>
               <p className="font-semibold text-sm">Certificate #{searchedId} Not Found</p>
               <p className="text-xs text-amber-300/80 mt-1">
-                No certificate with ID #{searchedId} has been stamped on Botchain Testnet. Please check the certificate ID number and verify again.
+                No certificate with ID #{searchedId} has been stamped on Botchain Mainnet. Please check the certificate ID number and verify again.
               </p>
             </div>
           </div>
@@ -244,12 +244,17 @@ export function VerifyCertificate() {
                       )}
                     </button>
                     <a
-                      href={`${botchainTestnet.blockExplorers.default.url}/address/${result.creator}`}
+                      href={`${activeChain.blockExplorers.default.url}/address/${result.creator}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1 text-slate-400 hover:text-cyan-400 transition-colors"
-                      title="View creator on BohrScan"
+                      className="p-1 text-slate-400 hover:text-cyan-400 transition-colors inline-flex items-center gap-1"
+                      title="View creator on BotchainScan"
                     >
+                      <img
+                        src="/botchain-logo.png"
+                        alt="BOT Chain"
+                        className="w-3 h-3 rounded-sm object-contain"
+                      />
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
@@ -273,7 +278,7 @@ export function VerifyCertificate() {
             <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400 flex items-center gap-1.5">
               <Info className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
               <span>
-                Data queried live from Botchain Testnet smart contract at block timestamp{" "}
+                Data queried live from {activeChain.name} smart contract at block timestamp{" "}
                 <code className="text-cyan-400 font-mono">{result.timestamp}</code>.
               </span>
             </div>
